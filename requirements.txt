@@ -1,4 +1,2 @@
-anthropic
-flask
-python-dotenv
-flask-cors
+flask==2.3.2
+anthropic==0.17.0
