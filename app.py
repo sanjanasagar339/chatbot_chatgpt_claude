@@ -1,14 +1,15 @@
 import traceback
 from flask import Flask, request, jsonify
+from flask_cors import CORS  # ✅ ADD THIS
 import os
 import anthropic
 
 app = Flask(__name__)
+CORS(app)  # ✅ ENABLE CORS FOR ALL ROUTES
 
 def get_anthropic_client():
     api_key = os.getenv("ANTHROPIC_API_KEY")
 
-    # ✅ Debug log (you can remove this after confirming it's working)
     print("🔍 Runtime API Key:", api_key[:10] + "..." if api_key else "❌ None found")
 
     if not api_key:
@@ -42,4 +43,3 @@ def chat():
 
 if __name__ == "__main__":
     app.run(debug=False, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
-
