@@ -23,7 +23,6 @@ def home():
 @app.route("/chat", methods=["POST"])
 def chat():
     data = request.json
-    print("*******",api_key)
     user_prompt = data.get("prompt", "")
 
     if not user_prompt:
