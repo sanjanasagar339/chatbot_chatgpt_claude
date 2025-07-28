@@ -36,7 +36,17 @@ def chat():
             max_tokens=1024,
             messages=[{"role": "user", "content": user_prompt}]
         )
-        return jsonify({"response": response.content[0].text})
+
+        # Log response structure for debugging
+        print("🔁 Claude API raw response:", response)
+
+        # Get message text safely
+        content_list = response.content
+        if content_list and isinstance(content_list, list):
+            return jsonify({"response": content_list[0].text})
+        else:
+            return jsonify({"error": "Invalid response format from Claude"}), 500
+
     except Exception as e:
         traceback.print_exc()
         return jsonify({"error": str(e)}), 500
