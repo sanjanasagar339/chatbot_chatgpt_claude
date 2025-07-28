@@ -7,10 +7,13 @@ app = Flask(__name__)
 
 def get_anthropic_client():
     api_key = os.getenv("ANTHROPIC_API_KEY")
+
+    # ✅ Debug log (you can remove this after confirming it's working)
+    print("🔍 Runtime API Key:", api_key[:10] + "..." if api_key else "❌ None found")
+
     if not api_key:
         raise ValueError("❌ Anthropic API key not found in environment variables.")
-    # Optional debug print (remove in production)
-    print("Loaded API Key:", api_key[:8] + "..." if api_key else "❌ None")
+    
     return anthropic.Anthropic(api_key=api_key)
 
 @app.route("/")
