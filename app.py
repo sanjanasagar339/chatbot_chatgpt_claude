@@ -31,27 +31,35 @@ def chat():
 
     try:
         client = get_anthropic_client()
+
+        # Modify the user input to suggest behavior based on its content
+        if "define" in user_prompt.lower() or "what is" in user_prompt.lower():
+            instruction = "Please give a very concise answer, ideally 1-2 lines only."
+        elif "brief" in user_prompt.lower():
+            instruction = "Please give a short but complete explanation, around 3-5 lines."
+        else:
+            instruction = "Respond clearly and naturally."
+
+        full_prompt = f"{instruction}\n\n{user_prompt}"
+
         response = client.messages.create(
             model="claude-3-haiku-20240307",
-            max_tokens=100,
-            messages=[{"role": "user", "content": user_prompt}]
+            max_tokens=300,  # allow enough room for full sentences
+            messages=[{"role": "user", "content": full_prompt}]
         )
 
-        # Log response structure for debugging
-        print("🔁 Claude API raw response:", response)
-
-        # Get message text safely
         content_list = response.content
         if content_list and isinstance(content_list, list):
-            return jsonify({"response": content_list[0].text})
+            return jsonify({"response": content_list[0].text.strip()})
         else:
             return jsonify({"error": "Invalid response format from Claude"}), 500
 
     except Exception as e:
         traceback.print_exc()
         return jsonify({"error": str(e)}), 500
-
+        
 if __name__ == "__main__":
     app.run(debug=False, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+
 
 
