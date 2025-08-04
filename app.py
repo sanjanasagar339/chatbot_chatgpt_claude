@@ -33,7 +33,7 @@ def chat():
         client = get_anthropic_client()
         response = client.messages.create(
             model="claude-3-haiku-20240307",
-            max_tokens=1024,
+            max_tokens=200,
             messages=[{"role": "user", "content": user_prompt}]
         )
 
@@ -53,3 +53,4 @@ def chat():
 
 if __name__ == "__main__":
     app.run(debug=False, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+
